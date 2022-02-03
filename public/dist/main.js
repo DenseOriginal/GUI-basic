@@ -148,7 +148,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 var button_1 = __webpack_require__(1);
 var button;
 window.setup = function () {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(1368, 722);
     background(255);
     button = new button_1.Button(100, 100, 'Hello');
     button.textSize = 24;
