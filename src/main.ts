@@ -1,25 +1,31 @@
 /// <reference path="../node_modules/@types/p5/global.d.ts"/>
 
+import { addListener } from "process";
 import { Button } from "./GUI/button";
 
-let button: Button;
+let increaseButton: Button;
 
 (window as any).setup = () => {
 	createCanvas(1368, 722);
 
 	background(255);
 
-	button = new Button(100, 100, 'Hello');
-	button.textSize = 24;
+	increaseButton = new Button(width-35, +35, '+', 5);
+	increaseButton.textSize = 24;
 
-	button.onClick = () => console.log('onClick');
-	button.onHover = () => console.log('onHover');
-	button.onRelease = () => console.log('onRelease');
-	button.onPressed = () => console.log('onPressed');
+	increaseButton.onClick = () => console.log('increase brush size');
+	increaseButton.onHover = () => console.log('onHover');
+	increaseButton.onRelease = () => console.log('onRelease');
+	increaseButton.onPressed = () => console.log('onPressed');
 }
 
 (window as any).draw = () => {
 
-	rect(width-100,0,width, height);
-	button.live();
+	push();
+	fill(230);
+	noStroke();
+	rect(width-478,0,width, height);
+	pop();
+
+	increaseButton.live();
 }

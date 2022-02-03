@@ -22,6 +22,7 @@ export class Button {
     public text: string = "",
     public cornerRounding: number = 0,
     public backgroundColor: Color = color(175),
+    public hoverWeight: number = 0.1,
     public clickedColor: Color = color(130),
     public textColor: Color = color(0),
   ) { }
@@ -70,7 +71,8 @@ export class Button {
     textSize(this.textSize);
 
     noStroke();
-    fill(this.isClicked ? this.clickedColor : this.backgroundColor);
+
+    fill(this.isClicked ? this.clickedColor : (this.isHovering ? lerpColor(this.backgroundColor,color(0), this.hoverWeight) : this.backgroundColor));
 
     rect(0, 0, width, height,this.cornerRounding);
 
