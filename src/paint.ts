@@ -4,7 +4,8 @@ type Point = { x: number, y: number };
 type Line = { start: Point, end: Point };
 type BrushStroke = { color: Color, thickness: number, lines: Array<Line> };
 
-const brushStrokes: Array<BrushStroke> = []
+const brushStrokes: Array<BrushStroke> = [];
+const redoStack: Array<BrushStroke> = [];
 const canvasWidth = 890;
 const canvasHeight = 722;
 let newBrushStroke: undefined | BrushStroke = undefined;
@@ -36,7 +37,10 @@ export function drawSketchpad() {
       // Create the new brush stroke, with a basic line
       // Because we use the endpoint from the prev line, to create a new line
       lines: [ { start: pointFromMouse(), end: pointFromMouse() } ]
-    }
+    };
+
+    // We also need to clear the redoStack, since we can't merge the two different histories
+    redoStack.length = 0;
   }
 
   // If the mouse isn't clicked, but it was in the last from
@@ -93,6 +97,29 @@ function drawPreviousStrokes() {
     }
     pop();
   }
+}
+
+// Check to see if the user pressed CTRL + Z
+// If they did, then we can undo the last stroke
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'z' && e.ctrlKey) undo();
+  if(e.key === 'y' && e.ctrlKey) redo();
+});
+
+function undo() {
+  console.log('Before: ', brushStrokes);
+  
+  // If there is no brushStrokes, then we can't undo
+  const strokeToUndo = brushStrokes.pop();
+  if(strokeToUndo) redoStack.push(strokeToUndo);
+
+  console.log('After: ', brushStrokes);
+}
+
+function redo() {
+  // If there is no redoStack, then we can't redo
+  const strokeToRedo = redoStack.pop();
+  if(strokeToRedo) brushStrokes.push(strokeToRedo);
 }
 
 // Helper to make sure mouse is inside sketchpad

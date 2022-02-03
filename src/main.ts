@@ -12,9 +12,6 @@ let blueButton: Button;
 
 (window as any).setup = () => {
 	createCanvas(1368, 722);
-
-	background(255);
-
 	increaseButton = new Button(width-70, 35, '+', 5);
 	increaseButton.textSize = 24;
 	increaseButton.onClick = () => config.thickness++;
@@ -45,6 +42,9 @@ let blueButton: Button;
 }
 
 (window as any).draw = () => {
+	// We need to clear the background
+	// Otherwise CTRL+Z will not work
+	background(255);
 
 	push();
 	fill(200);

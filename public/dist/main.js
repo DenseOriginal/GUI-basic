@@ -127,6 +127,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.drawSketchpad = exports.config = void 0;
 var brushStrokes = [];
+var redoStack = [];
 var canvasWidth = 890;
 var canvasHeight = 722;
 var newBrushStroke = undefined;
@@ -152,6 +153,8 @@ function drawSketchpad() {
             // Because we use the endpoint from the prev line, to create a new line
             lines: [{ start: pointFromMouse(), end: pointFromMouse() }]
         };
+        // We also need to clear the redoStack, since we can't merge the two different histories
+        redoStack.length = 0;
     }
     // If the mouse isn't clicked, but it was in the last from
     // The the mouse has been released, and we can end the line
@@ -201,6 +204,28 @@ function drawPreviousStrokes() {
         }
         pop();
     }
+}
+// Check to see if the user pressed CTRL + Z
+// If they did, then we can undo the last stroke
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'z' && e.ctrlKey)
+        undo();
+    if (e.key === 'y' && e.ctrlKey)
+        redo();
+});
+function undo() {
+    console.log('Before: ', brushStrokes);
+    // If there is no brushStrokes, then we can't undo
+    var strokeToUndo = brushStrokes.pop();
+    if (strokeToUndo)
+        redoStack.push(strokeToUndo);
+    console.log('After: ', brushStrokes);
+}
+function redo() {
+    // If there is no redoStack, then we can't redo
+    var strokeToRedo = redoStack.pop();
+    if (strokeToRedo)
+        brushStrokes.push(strokeToRedo);
 }
 // Helper to make sure mouse is inside sketchpad
 function isMouseInsideSketchpad() {
@@ -261,7 +286,6 @@ var greenButton;
 var blueButton;
 window.setup = function () {
     createCanvas(1368, 722);
-    background(255);
     increaseButton = new button_1.Button(width - 70, 35, '+', 5);
     increaseButton.textSize = 24;
     increaseButton.onClick = function () { return paint_1.config.thickness++; };
@@ -286,6 +310,9 @@ window.setup = function () {
     blueButton.onClick = function () { return console.log('change colour blue'); };
 };
 window.draw = function () {
+    // We need to clear the background
+    // Otherwise CTRL+Z will not work
+    background(255);
     push();
     fill(200);
     noStroke();
