@@ -11,6 +11,15 @@ let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;
 
+export const config = {
+  thickness: 5,
+  color: {
+    r: 0,
+    g: 0,
+    b: 0,
+  }
+}
+
 export function drawSketchpad() {
   drawPreviousStrokes();
 
@@ -19,11 +28,11 @@ export function drawSketchpad() {
   if(mouseIsPressed && !prevMouseDown) {
     newBrushStroke = {
       color: color(
-        random(150, 255),
-        random(150, 255),
-        random(150, 255),
+        config.color.r,
+        config.color.g,
+        config.color.b,
       ),
-      thickness: random(3, 10),
+      thickness: config.thickness,
       // Create the new brush stroke, with a basic line
       // Because we use the endpoint from the prev line, to create a new line
       lines: [ { start: pointFromMouse(), end: pointFromMouse() } ]
