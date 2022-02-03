@@ -54,6 +54,11 @@ let blueButton: Button;
 
 	drawSketchpad();
 
+	// Draw the current thickness to the left of the thickness buttons
+	textSize(16);
+	textAlign(CENTER, CENTER);
+	text(config.thickness, width-110, 35);
+
 	decreaseButton.live();
 	increaseButton.live();
 

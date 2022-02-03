@@ -292,6 +292,10 @@ window.draw = function () {
     rect(width - 478, 0, width, height);
     pop();
     paint_1.drawSketchpad();
+    // Draw the current thickness to the left of the thickness buttons
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(paint_1.config.thickness, width - 110, 35);
     decreaseButton.live();
     increaseButton.live();
     eraserButton.live();
