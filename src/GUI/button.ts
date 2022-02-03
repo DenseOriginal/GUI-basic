@@ -20,6 +20,7 @@ export class Button {
     public x: number,
     public y: number,
     public text: string = "",
+    public cornerRounding: number = 0,
     public backgroundColor: Color = color(175),
     public clickedColor: Color = color(130),
     public textColor: Color = color(0),
@@ -57,10 +58,10 @@ export class Button {
 
     this._isClicked = tempIsClicked;
     this._isHovering = tempIsMouseHovering;
-    this.draw(width, height);
+    this.draw(width, height, this.cornerRounding);
   }
 
-  private draw(width: number, height: number): void {
+  private draw(width: number, height: number, cornerRounding: number): void {
     push();
 
     translate(this.x, this.y);
@@ -71,7 +72,7 @@ export class Button {
     noStroke();
     fill(this.isClicked ? this.clickedColor : this.backgroundColor);
 
-    rect(0, 0, width, height);
+    rect(0, 0, width, height,this.cornerRounding);
 
     fill(this.textColor);
     text(this.text, 0, 0);

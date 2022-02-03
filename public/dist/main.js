@@ -9,14 +9,16 @@
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Button = void 0;
 var Button = /** @class */ (function () {
-    function Button(x, y, text, backgroundColor, clickedColor, textColor) {
+    function Button(x, y, text, cornerRounding, backgroundColor, clickedColor, textColor) {
         if (text === void 0) { text = ""; }
+        if (cornerRounding === void 0) { cornerRounding = 0; }
         if (backgroundColor === void 0) { backgroundColor = color(175); }
         if (clickedColor === void 0) { clickedColor = color(130); }
         if (textColor === void 0) { textColor = color(0); }
         this.x = x;
         this.y = y;
         this.text = text;
+        this.cornerRounding = cornerRounding;
         this.backgroundColor = backgroundColor;
         this.clickedColor = clickedColor;
         this.textColor = textColor;
@@ -70,9 +72,9 @@ var Button = /** @class */ (function () {
         }
         this._isClicked = tempIsClicked;
         this._isHovering = tempIsMouseHovering;
-        this.draw(width, height);
+        this.draw(width, height, this.cornerRounding);
     };
-    Button.prototype.draw = function (width, height) {
+    Button.prototype.draw = function (width, height, cornerRounding) {
         push();
         translate(this.x, this.y);
         rectMode(CENTER);
@@ -80,7 +82,7 @@ var Button = /** @class */ (function () {
         textSize(this.textSize);
         noStroke();
         fill(this.isClicked ? this.clickedColor : this.backgroundColor);
-        rect(0, 0, width, height);
+        rect(0, 0, width, height, this.cornerRounding);
         fill(this.textColor);
         text(this.text, 0, 0);
         pop();
