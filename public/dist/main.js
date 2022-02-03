@@ -14,7 +14,7 @@ var Button = /** @class */ (function () {
         if (cornerRounding === void 0) { cornerRounding = 0; }
         if (backgroundColor === void 0) { backgroundColor = color(175); }
         if (hoverWeight === void 0) { hoverWeight = 0.1; }
-        if (clickedColor === void 0) { clickedColor = color(130); }
+        if (clickedColor === void 0) { clickedColor = color(200); }
         if (textColor === void 0) { textColor = color(0); }
         this.x = x;
         this.y = y;
@@ -83,7 +83,7 @@ var Button = /** @class */ (function () {
         textAlign(CENTER, CENTER);
         textSize(this.textSize);
         noStroke();
-        fill(this.isClicked ? lerpColor(this.backgroundColor, this.clickedColor, 1) : (this.isHovering ? lerpColor(this.backgroundColor, color(0), this.hoverWeight) : this.backgroundColor));
+        fill(this.isClicked ? lerpColor(this.backgroundColor, this.clickedColor, 0.4) : (this.isHovering ? lerpColor(this.backgroundColor, color(0), this.hoverWeight) : this.backgroundColor));
         rect(0, 0, width, height, this.cornerRounding);
         fill(this.textColor);
         text(this.text, 0, 0);
@@ -250,21 +250,25 @@ window.setup = function () {
     increaseButton = new button_1.Button(width - 70, 35, '+', 5);
     increaseButton.textSize = 24;
     increaseButton.onClick = function () { return console.log('increase brush size'); };
-    decreaseButton = new button_1.Button(width - 35, 35, '-', 5);
+    decreaseButton = new button_1.Button(width - 30, 35, '-', 5);
     decreaseButton.textSize = 24;
     decreaseButton.onClick = function () { return console.log('decrease brush size'); };
     eraserButton = new button_1.Button(width - 145, 85, "  ");
     eraserButton.backgroundColor = color(255);
     eraserButton.textSize = 24;
+    eraserButton.onClick = function () { return console.log('change colour white'); };
     redButton = new button_1.Button(width - 105, 85, "  ");
     redButton.backgroundColor = color(255, 0, 0);
     redButton.textSize = 24;
+    redButton.onClick = function () { return console.log('change colour red'); };
     greenButton = new button_1.Button(width - 65, 85, "  ");
     greenButton.backgroundColor = color(0, 255, 0);
     greenButton.textSize = 24;
+    greenButton.onClick = function () { return console.log('change colour green'); };
     blueButton = new button_1.Button(width - 25, 85, "  ");
     blueButton.backgroundColor = color(0, 0, 255);
     blueButton.textSize = 24;
+    blueButton.onClick = function () { return console.log('change colour blue'); };
 };
 window.draw = function () {
     push();

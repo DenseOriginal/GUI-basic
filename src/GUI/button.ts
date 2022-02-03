@@ -23,7 +23,7 @@ export class Button {
     public cornerRounding: number = 0,
     public backgroundColor: Color = color(175),
     public hoverWeight: number = 0.1,
-    public clickedColor: Color = color(130),
+    public clickedColor: Color = color(200),
     public textColor: Color = color(0),
   ) { }
 
@@ -72,7 +72,7 @@ export class Button {
 
     noStroke();
 
-    fill(this.isClicked ? lerpColor(this.backgroundColor,this.clickedColor, 1) : (this.isHovering ? lerpColor(this.backgroundColor,color(0), this.hoverWeight) : this.backgroundColor));
+    fill(this.isClicked ? lerpColor(this.backgroundColor,this.clickedColor, 0.4) : (this.isHovering ? lerpColor(this.backgroundColor,color(0), this.hoverWeight) : this.backgroundColor));
 
     rect(0, 0, width, height,this.cornerRounding);
 
