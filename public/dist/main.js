@@ -138,8 +138,8 @@ function drawSketchpad() {
     // Then we can start a new line
     if (mouseIsPressed && !prevMouseDown) {
         newBrushStroke = {
-            color: color(0),
-            thickness: 9,
+            color: color(random(150, 255), random(150, 255), random(150, 255)),
+            thickness: random(3, 10),
             // Create the new brush stroke, with a basic line
             // Because we use the endpoint from the prev line, to create a new line
             lines: [{ start: pointFromMouse(), end: pointFromMouse() }]
