@@ -2,7 +2,7 @@ import { Color } from "p5";
 
 type Point = { x: number, y: number };
 type Line = { start: Point, end: Point };
-type BrushStroke = { color: Color, thickness: number, lines: Array<Line> };
+type BrushStroke = { color: Color | string, thickness: number, lines: Array<Line> };
 
 const brushStrokes: Array<BrushStroke> = [];
 const redoStack: Array<BrushStroke> = [];
@@ -14,11 +14,7 @@ const minLengthBetweenPoint = 2;
 
 export const config = {
   thickness: 5,
-  color: {
-    r: 0,
-    g: 0,
-    b: 0,
-  }
+  color: '#000000',
 }
 
 export function drawSketchpad() {
@@ -28,11 +24,7 @@ export function drawSketchpad() {
   // Then we can start a new line
   if(mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
     newBrushStroke = {
-      color: color(
-        config.color.r,
-        config.color.g,
-        config.color.b,
-      ),
+      color: config.color,
       thickness: config.thickness,
       // Create the new brush stroke, with a basic line
       // Because we use the endpoint from the prev line, to create a new line
@@ -82,7 +74,7 @@ function drawPreviousStrokes() {
   const strokesToDraw = newBrushStroke ? [...brushStrokes, newBrushStroke] : brushStrokes;
   for(const brushStroke of strokesToDraw) {
     push();
-    stroke(brushStroke.color);
+    stroke(brushStroke.color as string); // IDFK whats going on here, stroke accepts both Color and string, but typescript is being a bitch when it sees a type of Color
     strokeWeight(brushStroke.thickness);
     noFill();
 

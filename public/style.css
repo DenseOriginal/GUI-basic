@@ -11,3 +11,20 @@ body {
     place-items: center;
     background-color: #282C34;
 }
+
+#container {
+    /* Both the container and the colorPicker needs to have position relative */
+    position: relative;
+}
+
+input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    position: relative;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+}

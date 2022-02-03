@@ -1,17 +1,21 @@
 /// <reference path="../node_modules/@types/p5/global.d.ts"/>
 
+import { Element } from "p5";
 import { Button } from "./GUI/button";
 import { config, drawSketchpad } from "./paint";
 
 let increaseButton: Button;
 let decreaseButton: Button;
 let eraserButton: Button;
-let redButton: Button;
-let greenButton: Button;
-let blueButton: Button;
+let colorButton: Element;
+// let redButton: Button;
+// let greenButton: Button;
+// let blueButton: Button;
 
 (window as any).setup = () => {
-	createCanvas(1368, 722);
+	const canvas = createCanvas(1368, 722);
+	canvas.parent('container');
+
 	increaseButton = new Button(width-70, 35, '+', 5);
 	increaseButton.textSize = 24;
 	increaseButton.onClick = () => config.thickness++;
@@ -25,20 +29,30 @@ let blueButton: Button;
 	eraserButton.textSize = 24;
 	eraserButton.onClick = () => console.log('change colour white');
 
-	redButton = new Button(width-25, 125, "  ")
-	redButton.backgroundColor = color(255,0,0)
-	redButton.textSize = 24;
-	redButton.onClick = () => console.log('change colour red');
+	colorButton = createColorPicker()
+		.size(29.5, 29.5)
+		.parent('container') // We need to parent this to the container, so that we can position it relative to the canvas
+		.position(width-39.5, 105);
+	(colorButton.elt as HTMLInputElement).addEventListener('change', () => {
+		// P5 is dumb, because they made a generic element type for all inputs, and just set the return type
+		// Of the value function to ()string | number) but a colorPicker only returns a string
+		config.color = colorButton.value() as string;
+	});
 
-	greenButton = new Button(width-25, 165, "  ")
-	greenButton.backgroundColor = color(0,255,0)
-	greenButton.textSize = 24;
-	greenButton.onClick = () => console.log('change colour green');
+	// redButton = new Button(width-25, 125, "  ")
+	// redButton.backgroundColor = color(255,0,0)
+	// redButton.textSize = 24;
+	// redButton.onClick = () => console.log('change colour red');
 
-	blueButton = new Button(width-25, 205, "  ")
-	blueButton.backgroundColor = color(0,0,255)
-	blueButton.textSize = 24;
-	blueButton.onClick = () => console.log('change colour blue');
+	// greenButton = new Button(width-25, 165, "  ")
+	// greenButton.backgroundColor = color(0,255,0)
+	// greenButton.textSize = 24;
+	// greenButton.onClick = () => console.log('change colour green');
+
+	// blueButton = new Button(width-25, 205, "  ")
+	// blueButton.backgroundColor = color(0,0,255)
+	// blueButton.textSize = 24;
+	// blueButton.onClick = () => console.log('change colour blue');
 }
 
 (window as any).draw = () => {
@@ -67,8 +81,9 @@ let blueButton: Button;
 	noStroke();
 	rect(width-50, 60, width, 170)
 	pop();
+
 	eraserButton.live();
-	redButton.live();
-	greenButton.live();
-	blueButton.live();
+	// redButton.live();
+	// greenButton.live();
+	// blueButton.live();
 }
