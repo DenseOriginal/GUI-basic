@@ -25,7 +25,7 @@ export function drawSketchpad() {
 
   // If the mouse is clicked, but wasn't in the last frame
   // Then we can start a new line
-  if(mouseIsPressed && !prevMouseDown) {
+  if(mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
     newBrushStroke = {
       color: color(
         config.color.r,
@@ -45,14 +45,17 @@ export function drawSketchpad() {
     // Push the new brushStroke to the brushStrokes array
     // But only if newBrushStrokes isn't undefined
     if(newBrushStroke) brushStrokes.push(newBrushStroke);
+
+    // And then set newBrushStroke to undefined
+    newBrushStroke = undefined;
   }
 
   // If the mouse is pressed, and it was in the last frame, we can create line segments
   // In the brushStroke
-  if(mouseIsPressed && prevMouseDown) {
-    // Use the last point in the brushStroke as the start of this new line,
-    // If it doesn't exist, just use the mouse position
-    const lastPoint = newBrushStroke?.lines[newBrushStroke?.lines.length - 1].end || pointFromMouse();
+  // Only do stuff if we have initiated a newBrushStroke
+  if(mouseIsPressed && prevMouseDown && newBrushStroke) {
+    // Use the last point in the brushStroke as the start of this new line
+    const lastPoint = newBrushStroke.lines[newBrushStroke?.lines.length - 1].end;
     const newLine: Line = {
       start: lastPoint,
       end: pointFromMouse(),
@@ -90,6 +93,12 @@ function drawPreviousStrokes() {
     }
     pop();
   }
+}
+
+// Helper to make sure mouse is inside sketchpad
+function isMouseInsideSketchpad() {
+  return mouseX >= 0 && mouseX <= canvasWidth &&
+    mouseY >= 0 && mouseY <= canvasHeight;
 }
 
 // Helper, to write DRY code
