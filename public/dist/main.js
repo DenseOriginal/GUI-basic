@@ -210,12 +210,10 @@ document.addEventListener('keydown', function (e) {
         redo();
 });
 function undo() {
-    console.log('Before: ', brushStrokes);
     // If there is no brushStrokes, then we can't undo
     var strokeToUndo = brushStrokes.pop();
     if (strokeToUndo)
         redoStack.push(strokeToUndo);
-    console.log('After: ', brushStrokes);
 }
 function redo() {
     // If there is no redoStack, then we can't redo
