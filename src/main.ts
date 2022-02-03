@@ -5,7 +5,7 @@ import { Button } from "./GUI/button";
 let button: Button;
 
 (window as any).setup = () => {
-	createCanvas(windowWidth, windowHeight);
+	createCanvas(1368, 722);
 
 	background(255);
 
