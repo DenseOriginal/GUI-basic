@@ -1,6 +1,7 @@
 /// <reference path="../node_modules/@types/p5/global.d.ts"/>
 
 import { Button } from "./GUI/button";
+import { drawSketchpad } from "./paint";
 
 let button: Button;
 
@@ -22,4 +23,6 @@ let button: Button;
 
 	rect(width-100,0,width, height);
 	button.live();
+
+	drawSketchpad();
 }

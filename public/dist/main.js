@@ -110,6 +110,95 @@ var Button = /** @class */ (function () {
 exports.Button = Button;
 
 
+/***/ }),
+/* 2 */
+/***/ (function(__unused_webpack_module, exports) {
+
+
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.drawSketchpad = void 0;
+var brushStrokes = [];
+var canvasWidth = 890;
+var canvasHeight = 722;
+var newBrushStroke = undefined;
+var prevMouseDown = false;
+var minLengthBetweenPoint = 2;
+function drawSketchpad() {
+    drawPreviousStrokes();
+    // If the mouse is clicked, but wasn't in the last frame
+    // Then we can start a new line
+    if (mouseIsPressed && !prevMouseDown) {
+        newBrushStroke = {
+            color: color(0),
+            thickness: 9,
+            // Create the new brush stroke, with a basic line
+            // Because we use the endpoint from the prev line, to create a new line
+            lines: [{ start: pointFromMouse(), end: pointFromMouse() }]
+        };
+    }
+    // If the mouse isn't clicked, but it was in the last from
+    // The the mouse has been released, and we can end the line
+    if (!mouseIsPressed && prevMouseDown) {
+        // Push the new brushStroke to the brushStrokes array
+        // But only if newBrushStrokes isn't undefined
+        if (newBrushStroke)
+            brushStrokes.push(newBrushStroke);
+    }
+    // If the mouse is pressed, and it was in the last frame, we can create line segments
+    // In the brushStroke
+    if (mouseIsPressed && prevMouseDown) {
+        // Use the last point in the brushStroke as the start of this new line,
+        // If it doesn't exist, just use the mouse position
+        var lastPoint = (newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines[(newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines.length) - 1].end) || pointFromMouse();
+        var newLine = {
+            start: lastPoint,
+            end: pointFromMouse(),
+        };
+        // Only add the new Line if distance to the last line, is grater than to pixels
+        var deltaX = lastPoint.x - newLine.end.x;
+        var deltaY = lastPoint.y - newLine.end.y;
+        var distanceSqr = Math.pow(deltaX, 2) + Math.pow(deltaY, 2);
+        if (distanceSqr > Math.pow(minLengthBetweenPoint, 2))
+            newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines.push(newLine);
+    }
+    // Update the prevMouseDown variable
+    prevMouseDown = mouseIsPressed;
+}
+exports.drawSketchpad = drawSketchpad;
+function drawPreviousStrokes() {
+    // Draw all the brush strokes
+    // Including the newBrushStroke if it exist
+    var strokesToDraw = newBrushStroke ? __spreadArrays(brushStrokes, [newBrushStroke]) : brushStrokes;
+    for (var _i = 0, strokesToDraw_1 = strokesToDraw; _i < strokesToDraw_1.length; _i++) {
+        var brushStroke = strokesToDraw_1[_i];
+        push();
+        stroke(brushStroke.color);
+        strokeWeight(brushStroke.thickness);
+        noFill();
+        // Use the name line_ as because line is reserved for the 'line' function
+        for (var _a = 0, _b = brushStroke.lines; _a < _b.length; _a++) {
+            var line_ = _b[_a];
+            line(line_.start.x, line_.start.y, line_.end.x, line_.end.y);
+        }
+        pop();
+    }
+}
+// Helper, to write DRY code
+function pointFromMouse() {
+    return {
+        x: min(mouseX, canvasWidth),
+        y: min(mouseY, canvasHeight),
+    };
+}
+
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -131,7 +220,7 @@ exports.Button = Button;
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
@@ -146,6 +235,7 @@ var exports = __webpack_exports__;
 /// <reference path="../node_modules/@types/p5/global.d.ts"/>
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var button_1 = __webpack_require__(1);
+var paint_1 = __webpack_require__(2);
 var button;
 window.setup = function () {
     createCanvas(1368, 722);
@@ -160,6 +250,7 @@ window.setup = function () {
 window.draw = function () {
     rect(width - 100, 0, width, height);
     button.live();
+    paint_1.drawSketchpad();
 };
 
 })();
