@@ -125,21 +125,29 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.drawSketchpad = void 0;
+exports.drawSketchpad = exports.config = void 0;
 var brushStrokes = [];
 var canvasWidth = 890;
 var canvasHeight = 722;
 var newBrushStroke = undefined;
 var prevMouseDown = false;
 var minLengthBetweenPoint = 2;
+exports.config = {
+    thickness: 5,
+    color: {
+        r: 0,
+        g: 0,
+        b: 0,
+    }
+};
 function drawSketchpad() {
     drawPreviousStrokes();
     // If the mouse is clicked, but wasn't in the last frame
     // Then we can start a new line
-    if (mouseIsPressed && !prevMouseDown) {
+    if (mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
         newBrushStroke = {
-            color: color(random(150, 255), random(150, 255), random(150, 255)),
-            thickness: random(3, 10),
+            color: color(exports.config.color.r, exports.config.color.g, exports.config.color.b),
+            thickness: exports.config.thickness,
             // Create the new brush stroke, with a basic line
             // Because we use the endpoint from the prev line, to create a new line
             lines: [{ start: pointFromMouse(), end: pointFromMouse() }]
@@ -152,13 +160,15 @@ function drawSketchpad() {
         // But only if newBrushStrokes isn't undefined
         if (newBrushStroke)
             brushStrokes.push(newBrushStroke);
+        // And then set newBrushStroke to undefined
+        newBrushStroke = undefined;
     }
     // If the mouse is pressed, and it was in the last frame, we can create line segments
     // In the brushStroke
-    if (mouseIsPressed && prevMouseDown) {
-        // Use the last point in the brushStroke as the start of this new line,
-        // If it doesn't exist, just use the mouse position
-        var lastPoint = (newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines[(newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines.length) - 1].end) || pointFromMouse();
+    // Only do stuff if we have initiated a newBrushStroke
+    if (mouseIsPressed && prevMouseDown && newBrushStroke) {
+        // Use the last point in the brushStroke as the start of this new line
+        var lastPoint = newBrushStroke.lines[(newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines.length) - 1].end;
         var newLine = {
             start: lastPoint,
             end: pointFromMouse(),
@@ -191,6 +201,11 @@ function drawPreviousStrokes() {
         }
         pop();
     }
+}
+// Helper to make sure mouse is inside sketchpad
+function isMouseInsideSketchpad() {
+    return mouseX >= 0 && mouseX <= canvasWidth &&
+        mouseY >= 0 && mouseY <= canvasHeight;
 }
 // Helper, to write DRY code
 function pointFromMouse() {
@@ -249,10 +264,10 @@ window.setup = function () {
     background(255);
     increaseButton = new button_1.Button(width - 70, 35, '+', 5);
     increaseButton.textSize = 24;
-    increaseButton.onClick = function () { return console.log('increase brush size'); };
+    increaseButton.onClick = function () { return paint_1.config.thickness++; };
     decreaseButton = new button_1.Button(width - 35, 35, '-', 5);
     decreaseButton.textSize = 24;
-    decreaseButton.onClick = function () { return console.log('decrease brush size'); };
+    decreaseButton.onClick = function () { return paint_1.config.thickness = max(1, paint_1.config.thickness - 1); }; // thickness kan ikke være mindre end 1
     eraserButton = new button_1.Button(width - 25, 85, "  ");
     eraserButton.backgroundColor = color(255);
     eraserButton.textSize = 24;
@@ -277,6 +292,10 @@ window.draw = function () {
     rect(width - 478, 0, width, height);
     pop();
     paint_1.drawSketchpad();
+    // Draw the current thickness to the left of the thickness buttons
+    textSize(16);
+    textAlign(CENTER, CENTER);
+    text(paint_1.config.thickness, width - 110, 35);
     decreaseButton.live();
     increaseButton.live();
     push();
