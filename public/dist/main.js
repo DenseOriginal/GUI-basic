@@ -9,10 +9,11 @@
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Button = void 0;
 var Button = /** @class */ (function () {
-    function Button(x, y, text, cornerRounding, backgroundColor, clickedColor, textColor) {
+    function Button(x, y, text, cornerRounding, backgroundColor, hoverWeight, clickedColor, textColor) {
         if (text === void 0) { text = ""; }
         if (cornerRounding === void 0) { cornerRounding = 0; }
         if (backgroundColor === void 0) { backgroundColor = color(175); }
+        if (hoverWeight === void 0) { hoverWeight = 0.1; }
         if (clickedColor === void 0) { clickedColor = color(130); }
         if (textColor === void 0) { textColor = color(0); }
         this.x = x;
@@ -20,6 +21,7 @@ var Button = /** @class */ (function () {
         this.text = text;
         this.cornerRounding = cornerRounding;
         this.backgroundColor = backgroundColor;
+        this.hoverWeight = hoverWeight;
         this.clickedColor = clickedColor;
         this.textColor = textColor;
         this._isClicked = false;
@@ -81,7 +83,7 @@ var Button = /** @class */ (function () {
         textAlign(CENTER, CENTER);
         textSize(this.textSize);
         noStroke();
-        fill(this.isClicked ? this.clickedColor : this.backgroundColor);
+        fill(this.isClicked ? this.clickedColor : (this.isHovering ? lerpColor(this.backgroundColor, color(0), this.hoverWeight) : this.backgroundColor));
         rect(0, 0, width, height, this.cornerRounding);
         fill(this.textColor);
         text(this.text, 0, 0);
@@ -236,21 +238,25 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 var button_1 = __webpack_require__(1);
 var paint_1 = __webpack_require__(2);
-var button;
+var increaseButton;
 window.setup = function () {
     createCanvas(1368, 722);
     background(255);
-    button = new button_1.Button(100, 100, 'Hello');
-    button.textSize = 24;
-    button.onClick = function () { return console.log('onClick'); };
-    button.onHover = function () { return console.log('onHover'); };
-    button.onRelease = function () { return console.log('onRelease'); };
-    button.onPressed = function () { return console.log('onPressed'); };
+    increaseButton = new button_1.Button(width - 35, +35, '+', 5);
+    increaseButton.textSize = 24;
+    increaseButton.onClick = function () { return console.log('increase brush size'); };
+    increaseButton.onHover = function () { return console.log('onHover'); };
+    increaseButton.onRelease = function () { return console.log('onRelease'); };
+    increaseButton.onPressed = function () { return console.log('onPressed'); };
 };
 window.draw = function () {
-    rect(width - 100, 0, width, height);
-    button.live();
+    push();
+    fill(230);
+    noStroke();
+    rect(width - 478, 0, width, height);
+    pop();
     paint_1.drawSketchpad();
+    increaseButton.live();
 };
 
 })();
