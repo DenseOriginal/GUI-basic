@@ -14,7 +14,7 @@ var Button = /** @class */ (function () {
         if (cornerRounding === void 0) { cornerRounding = 0; }
         if (backgroundColor === void 0) { backgroundColor = color(175); }
         if (hoverWeight === void 0) { hoverWeight = 0.1; }
-        if (clickedColor === void 0) { clickedColor = color(130); }
+        if (clickedColor === void 0) { clickedColor = color(200); }
         if (textColor === void 0) { textColor = color(0); }
         this.x = x;
         this.y = y;
@@ -83,7 +83,7 @@ var Button = /** @class */ (function () {
         textAlign(CENTER, CENTER);
         textSize(this.textSize);
         noStroke();
-        fill(this.isClicked ? lerpColor(this.backgroundColor, this.clickedColor, 1) : (this.isHovering ? lerpColor(this.backgroundColor, color(0), this.hoverWeight) : this.backgroundColor));
+        fill(this.isClicked ? lerpColor(this.backgroundColor, this.clickedColor, 0.4) : (this.isHovering ? lerpColor(this.backgroundColor, color(0), this.hoverWeight) : this.backgroundColor));
         rect(0, 0, width, height, this.cornerRounding);
         fill(this.textColor);
         text(this.text, 0, 0);
