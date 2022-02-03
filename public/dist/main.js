@@ -149,6 +149,7 @@ var button_1 = __webpack_require__(1);
 var button;
 window.setup = function () {
     createCanvas(windowWidth, windowHeight);
+    background(255);
     button = new button_1.Button(100, 100, 'Hello');
     button.textSize = 24;
     button.onClick = function () { return console.log('onClick'); };
@@ -157,7 +158,7 @@ window.setup = function () {
     button.onPressed = function () { return console.log('onPressed'); };
 };
 window.draw = function () {
-    background(255);
+    rect(width - 100, 0, width, height);
     button.live();
 };
 
