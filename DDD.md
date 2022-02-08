@@ -31,9 +31,11 @@ draw() {
 
 ### Udviklings process
 ![](agile-scrum.png)
+
 ## DOKUMENTATION (D2)
 
-
+Flowchart der beskriver macro delen af hvordan vi tegner og opretter linjerne på skærmen.
+![](BrushStrokeFlowChart.png)
 
 ## DELING (D3)
 ![](agile-scrum.png)
