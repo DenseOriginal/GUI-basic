@@ -1,10 +1,13 @@
 # DDD
 
 ## DESIGN (D1)
+
 ### Flowchart af overordnet program
-![](DesignFlowChart.png)
+
+![DesignFlowChart](DesignFlowChart.png)
 
 ### Pseudo-kode af umiddelbare knap klasse og test implementation
+
 ```js
 class knap () {
     constructor(x,y,w,h text) {
@@ -30,12 +33,14 @@ draw() {
 ```
 
 ### Udviklings process
-![](agile-scrum.png)
+
+![Agile Scrum](agile-scrum.png)
 
 ## DOKUMENTATION (D2)
 
 Flowchart der beskriver macro delen af hvordan vi tegner og opretter linjerne på skærmen.
-![](BrushStrokeFlowChart.png)
+![BrushStrokeFlowChart](BrushStrokeFlowChart.png)
 
 ## DELING (D3)
-![](agile-scrum.png)
+
+![Agile Scrum](agile-scrum.png)
