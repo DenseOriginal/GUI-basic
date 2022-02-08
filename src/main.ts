@@ -10,9 +10,6 @@ let eraserButton: Button;
 let penButton: Button;
 let markerButton: Button;
 let colorButton: Element;
-// let redButton: Button;
-// let greenButton: Button;
-// let blueButton: Button;
 
 (window as any).setup = () => {
 	const canvas = createCanvas(1368, 722);
@@ -54,21 +51,6 @@ let colorButton: Element;
 		// Of the value function to ()string | number) but a colorPicker only returns a string
 		config.color = colorButton.value() as string;
 	});
-
-	// redButton = new Button(width-25, 125, "  ")
-	// redButton.backgroundColor = color(255,0,0)
-	// redButton.textSize = 24;
-	// redButton.onClick = () => console.log('change colour red');
-
-	// greenButton = new Button(width-25, 165, "  ")
-	// greenButton.backgroundColor = color(0,255,0)
-	// greenButton.textSize = 24;
-	// greenButton.onClick = () => console.log('change colour green');
-
-	// blueButton = new Button(width-25, 205, "  ")
-	// blueButton.backgroundColor = color(0,0,255)
-	// blueButton.textSize = 24;
-	// blueButton.onClick = () => console.log('change colour blue');
 }
 
 (window as any).draw = () => {
@@ -108,7 +90,4 @@ let colorButton: Element;
 	eraserButton.live();
 	penButton.live();
 	markerButton.live();
-	// redButton.live();
-	// greenButton.live();
-	// blueButton.live();
 }

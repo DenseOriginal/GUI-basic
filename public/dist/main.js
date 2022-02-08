@@ -295,9 +295,6 @@ var eraserButton;
 var penButton;
 var markerButton;
 var colorButton;
-// let redButton: Button;
-// let greenButton: Button;
-// let blueButton: Button;
 window.setup = function () {
     var canvas = createCanvas(1368, 722);
     canvas.parent('container');
@@ -332,18 +329,6 @@ window.setup = function () {
         // Of the value function to ()string | number) but a colorPicker only returns a string
         paint_1.config.color = colorButton.value();
     });
-    // redButton = new Button(width-25, 125, "  ")
-    // redButton.backgroundColor = color(255,0,0)
-    // redButton.textSize = 24;
-    // redButton.onClick = () => console.log('change colour red');
-    // greenButton = new Button(width-25, 165, "  ")
-    // greenButton.backgroundColor = color(0,255,0)
-    // greenButton.textSize = 24;
-    // greenButton.onClick = () => console.log('change colour green');
-    // blueButton = new Button(width-25, 205, "  ")
-    // blueButton.backgroundColor = color(0,0,255)
-    // blueButton.textSize = 24;
-    // blueButton.onClick = () => console.log('change colour blue');
 };
 window.draw = function () {
     // We need to clear the background
@@ -374,9 +359,6 @@ window.draw = function () {
     eraserButton.live();
     penButton.live();
     markerButton.live();
-    // redButton.live();
-    // greenButton.live();
-    // blueButton.live();
 };
 
 })();
