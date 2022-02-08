@@ -137,6 +137,7 @@ var Tool;
 (function (Tool) {
     Tool[Tool["PEN"] = 0] = "PEN";
     Tool[Tool["ERASER"] = 1] = "ERASER";
+    Tool[Tool["MARKER"] = 2] = "MARKER";
 })(Tool = exports.Tool || (exports.Tool = {}));
 exports.config = {
     thickness: 5,
@@ -148,9 +149,13 @@ function drawSketchpad() {
     // If the mouse is clicked, but wasn't in the last frame
     // Then we can start a new line
     if (mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
+        // If the active tool is the Eraser then only do white color
+        var colorToUse = color(exports.config.activeTool == Tool.ERASER ? '#ffffff' : exports.config.color);
+        // If the activeTool is a marker, then make it slightly transparent
+        if (exports.config.activeTool == Tool.MARKER)
+            colorToUse.setAlpha(150);
         newBrushStroke = {
-            // If the active tool is the Eraser then only do white color
-            color: exports.config.activeTool == Tool.ERASER ? '#ffffff' : exports.config.color,
+            color: colorToUse,
             thickness: exports.config.thickness,
             // Create the new brush stroke, with a basic line
             // Because we use the endpoint from the prev line, to create a new line
@@ -201,10 +206,15 @@ function drawPreviousStrokes() {
         strokeWeight(brushStroke.thickness);
         noFill();
         // Use the name line_ as because line is reserved for the 'line' function
+        beginShape();
         for (var _a = 0, _b = brushStroke.lines; _a < _b.length; _a++) {
             var line_ = _b[_a];
-            line(line_.start.x, line_.start.y, line_.end.x, line_.end.y);
+            vertex(line_.start.x, line_.start.y);
         }
+        // Remmeber to draw the end point of the last line
+        var _c = brushStroke.lines[brushStroke.lines.length - 1].end, endX = _c.x, endY = _c.y;
+        vertex(endX, endY);
+        endShape();
         pop();
     }
 }
@@ -283,6 +293,7 @@ var increaseButton;
 var decreaseButton;
 var eraserButton;
 var penButton;
+var markerButton;
 var colorButton;
 // let redButton: Button;
 // let greenButton: Button;
@@ -304,10 +315,14 @@ window.setup = function () {
     penButton.backgroundColor = color(255);
     penButton.textSize = 18;
     penButton.onClick = function () { return paint_1.config.activeTool = paint_1.Tool.PEN; };
+    markerButton = new button_1.Button(width - 25, 145, "Marker");
+    markerButton.backgroundColor = color(255);
+    markerButton.textSize = 18;
+    markerButton.onClick = function () { return paint_1.config.activeTool = paint_1.Tool.MARKER; };
     colorButton = createColorPicker()
         .size(29.5, 29.5)
         .parent('container') // We need to parent this to the container, so that we can position it relative to the canvas
-        .position(width - 39.5, 135);
+        .position(width - 39.5, 165);
     colorButton.elt.addEventListener('change', function () {
         // P5 is dumb, because they made a generic element type for all inputs, and just set the return type
         // Of the value function to ()string | number) but a colorPicker only returns a string
@@ -343,7 +358,8 @@ window.draw = function () {
     // Draw the active tool
     textAlign(RIGHT, CENTER);
     var tool = paint_1.config.activeTool == paint_1.Tool.PEN ? 'Pen' :
-        paint_1.config.activeTool == paint_1.Tool.ERASER ? 'Eraser' : '';
+        paint_1.config.activeTool == paint_1.Tool.ERASER ? 'Eraser' :
+            paint_1.config.activeTool == paint_1.Tool.MARKER ? 'Marker' : '';
     text(tool, width - 5, 250);
     decreaseButton.live();
     increaseButton.live();
@@ -354,6 +370,7 @@ window.draw = function () {
     pop();
     eraserButton.live();
     penButton.live();
+    markerButton.live();
     // redButton.live();
     // greenButton.live();
     // blueButton.live();
