@@ -41,6 +41,47 @@ draw() {
 Flowchart der beskriver macro delen af hvordan vi tegner og opretter linjerne på skærmen.
 ![BrushStrokeFlowChart](BrushStrokeFlowChart.png)
 
+Klasse diagram over knap klassen
+
+```ts
+class Button {
+private _isClicked: boolean;
+  public get isClicked(): boolean;
+  private _isHovering: boolean;
+  public get isHovering(): boolean;
+  public onClick: Function;
+  public onHover: Function;
+  public onRelease: Function;
+  public onPressed: Function;
+
+  public paddingWidth: number;
+  public paddingHeight: number;
+  public textSize: number;
+  public width: number;
+  public height: number;
+
+  constructor(
+    public x: number,
+    public y: number,
+    public text?: string,
+    public cornerRounding?: number,
+    public backgroundColor?: Color,
+    public hoverWeight?: number,
+    public clickedColor?: Color,
+    public textColor?: Color,
+  ) { }
+
+  public live(): void
+  private draw(width: number, height: number, cornerRounding: number): void
+  private isMouseOver(width: number, height: number): boolean
+  
+  private _onClick(): void
+  private _onHover(): void
+  private _onRelease(): void
+  private _onPressed(): void
+}
+```
+
 ## DELING (D3)
 
 ![Agile Scrum](agile-scrum.png)
