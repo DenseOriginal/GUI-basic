@@ -318,12 +318,12 @@ window.draw = function () {
     // We need to clear the background
     // Otherwise CTRL+Z will not work
     background(255);
+    paint_1.drawSketchpad();
     push();
     fill(200);
     noStroke();
     rect(width - 478, 0, width, height);
     pop();
-    paint_1.drawSketchpad();
     // Draw the current thickness to the left of the thickness buttons
     textSize(16);
     textAlign(CENTER, CENTER);
