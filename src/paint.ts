@@ -6,15 +6,16 @@ type BrushStroke = { color: Color | string, thickness: number, lines: Array<Line
 
 const brushStrokes: Array<BrushStroke> = [];
 const redoStack: Array<BrushStroke> = [];
-const canvasWidth = 890;
-const canvasHeight = 722;
+export const canvasWidth = 1200;
+export const canvasHeight = 722;
 let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;
 
 export enum Tool {
   PEN,
-  ERASER
+  ERASER,
+  MARKER,
 }
 export const config = {
   thickness: 5,
@@ -28,9 +29,14 @@ export function drawSketchpad() {
   // If the mouse is clicked, but wasn't in the last frame
   // Then we can start a new line
   if(mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
+    // If the active tool is the Eraser then only do white color
+    const colorToUse = color(config.activeTool == Tool.ERASER ? '#ffffff' : config.color);
+
+    // If the activeTool is a marker, then make it slightly transparent
+    if(config.activeTool == Tool.MARKER) colorToUse.setAlpha(150);
+
     newBrushStroke = {
-      // If the active tool is the Eraser then only do white color
-      color: config.activeTool == Tool.ERASER ? '#ffffff' : config.color,
+      color: colorToUse,
       thickness: config.thickness,
       // Create the new brush stroke, with a basic line
       // Because we use the endpoint from the prev line, to create a new line
@@ -85,14 +91,23 @@ function drawPreviousStrokes() {
     noFill();
 
     // Use the name line_ as because line is reserved for the 'line' function
+    beginShape();
     for(const line_ of brushStroke.lines) {
-      line(
+
+      vertex(
         line_.start.x,
         line_.start.y,
-        line_.end.x,
-        line_.end.y
       );
     }
+
+    // Remmeber to draw the end point of the last line
+    const { x: endX, y: endY } = brushStroke.lines[brushStroke.lines.length - 1].end;
+    vertex(
+      endX,
+      endY
+    );
+    
+    endShape();
     pop();
   }
 }
