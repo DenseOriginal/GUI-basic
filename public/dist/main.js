@@ -125,7 +125,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.drawSketchpad = exports.config = void 0;
+exports.drawSketchpad = exports.config = exports.Tool = void 0;
 var brushStrokes = [];
 var redoStack = [];
 var canvasWidth = 890;
@@ -133,9 +133,15 @@ var canvasHeight = 722;
 var newBrushStroke = undefined;
 var prevMouseDown = false;
 var minLengthBetweenPoint = 2;
+var Tool;
+(function (Tool) {
+    Tool[Tool["PEN"] = 0] = "PEN";
+    Tool[Tool["ERASER"] = 1] = "ERASER";
+})(Tool = exports.Tool || (exports.Tool = {}));
 exports.config = {
     thickness: 5,
     color: '#000000',
+    activeTool: Tool.PEN
 };
 function drawSketchpad() {
     drawPreviousStrokes();
@@ -143,7 +149,8 @@ function drawSketchpad() {
     // Then we can start a new line
     if (mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
         newBrushStroke = {
-            color: exports.config.color,
+            // If the active tool is the Eraser then only do white color
+            color: exports.config.activeTool == Tool.ERASER ? '#ffffff' : exports.config.color,
             thickness: exports.config.thickness,
             // Create the new brush stroke, with a basic line
             // Because we use the endpoint from the prev line, to create a new line
@@ -275,6 +282,7 @@ var paint_1 = __webpack_require__(2);
 var increaseButton;
 var decreaseButton;
 var eraserButton;
+var penButton;
 var colorButton;
 // let redButton: Button;
 // let greenButton: Button;
@@ -288,14 +296,18 @@ window.setup = function () {
     decreaseButton = new button_1.Button(width - 35, 35, '-', 5);
     decreaseButton.textSize = 24;
     decreaseButton.onClick = function () { return paint_1.config.thickness = max(1, paint_1.config.thickness - 1); }; // thickness kan ikke være mindre end 1
-    eraserButton = new button_1.Button(width - 25, 85, "  ");
+    eraserButton = new button_1.Button(width - 25, 85, "Eraser");
     eraserButton.backgroundColor = color(255);
-    eraserButton.textSize = 24;
-    eraserButton.onClick = function () { return console.log('change colour white'); };
+    eraserButton.textSize = 18;
+    eraserButton.onClick = function () { return paint_1.config.activeTool = paint_1.Tool.ERASER; };
+    penButton = new button_1.Button(width - 25, 115, "Pen");
+    penButton.backgroundColor = color(255);
+    penButton.textSize = 18;
+    penButton.onClick = function () { return paint_1.config.activeTool = paint_1.Tool.PEN; };
     colorButton = createColorPicker()
         .size(29.5, 29.5)
         .parent('container') // We need to parent this to the container, so that we can position it relative to the canvas
-        .position(width - 39.5, 105);
+        .position(width - 39.5, 135);
     colorButton.elt.addEventListener('change', function () {
         // P5 is dumb, because they made a generic element type for all inputs, and just set the return type
         // Of the value function to ()string | number) but a colorPicker only returns a string
@@ -328,6 +340,11 @@ window.draw = function () {
     textSize(16);
     textAlign(CENTER, CENTER);
     text(paint_1.config.thickness, width - 110, 35);
+    // Draw the active tool
+    textAlign(RIGHT, CENTER);
+    var tool = paint_1.config.activeTool == paint_1.Tool.PEN ? 'Pen' :
+        paint_1.config.activeTool == paint_1.Tool.ERASER ? 'Eraser' : '';
+    text(tool, width - 5, 250);
     decreaseButton.live();
     increaseButton.live();
     push();
@@ -336,6 +353,7 @@ window.draw = function () {
     rect(width - 50, 60, width, 170);
     pop();
     eraserButton.live();
+    penButton.live();
     // redButton.live();
     // greenButton.live();
     // blueButton.live();

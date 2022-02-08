@@ -12,9 +12,14 @@ let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;
 
+export enum Tool {
+  PEN,
+  ERASER
+}
 export const config = {
   thickness: 5,
   color: '#000000',
+  activeTool: Tool.PEN
 }
 
 export function drawSketchpad() {
@@ -24,7 +29,8 @@ export function drawSketchpad() {
   // Then we can start a new line
   if(mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
     newBrushStroke = {
-      color: config.color,
+      // If the active tool is the Eraser then only do white color
+      color: config.activeTool == Tool.ERASER ? '#ffffff' : config.color,
       thickness: config.thickness,
       // Create the new brush stroke, with a basic line
       // Because we use the endpoint from the prev line, to create a new line
