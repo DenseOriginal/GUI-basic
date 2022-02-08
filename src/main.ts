@@ -65,15 +65,15 @@ let colorButton: Element;
 	// We need to clear the background
 	// Otherwise CTRL+Z will not work
 	background(255);
+	drawSketchpad();
 
+	
+	
 	push();
 	fill(200);
 	noStroke();
 	rect(width-478,0,width, height);
 	pop();
-
-	drawSketchpad();
-
 	// Draw the current thickness to the left of the thickness buttons
 	textSize(16);
 	textAlign(CENTER, CENTER);
@@ -87,13 +87,13 @@ let colorButton: Element;
 
 	decreaseButton.live();
 	increaseButton.live();
-
+	
 	push();
 	fill(210);
 	noStroke();
 	rect(width-50, 60, width, 170)
 	pop();
-
+	
 	eraserButton.live();
 	penButton.live();
 	// redButton.live();
