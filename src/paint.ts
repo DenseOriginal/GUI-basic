@@ -6,8 +6,8 @@ type BrushStroke = { color: Color | string, thickness: number, lines: Array<Line
 
 const brushStrokes: Array<BrushStroke> = [];
 const redoStack: Array<BrushStroke> = [];
-const canvasWidth = 890;
-const canvasHeight = 722;
+export const canvasWidth = 1200;
+export const canvasHeight = 722;
 let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;

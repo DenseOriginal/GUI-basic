@@ -2,7 +2,7 @@
 
 import { Element } from "p5";
 import { Button } from "./GUI/button";
-import { config, drawSketchpad, Tool } from "./paint";
+import { canvasWidth, config, drawSketchpad, Tool } from "./paint";
 
 let increaseButton: Button;
 let decreaseButton: Button;
@@ -64,7 +64,7 @@ let colorButton: Element;
 	push();
 	fill(200);
 	noStroke();
-	rect(width-478,0,width, height);
+	rect(canvasWidth,0,width, height);
 	pop();
 
 	push();
@@ -90,4 +90,8 @@ let colorButton: Element;
 	eraserButton.live();
 	penButton.live();
 	markerButton.live();
+
+	// Credits
+	textAlign(RIGHT, BOTTOM);
+	text('Lavet af\nAnders og Rasmus', width-5, height-5);
 }

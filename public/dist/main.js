@@ -125,11 +125,11 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.drawSketchpad = exports.config = exports.Tool = void 0;
+exports.drawSketchpad = exports.config = exports.Tool = exports.canvasHeight = exports.canvasWidth = void 0;
 var brushStrokes = [];
 var redoStack = [];
-var canvasWidth = 890;
-var canvasHeight = 722;
+exports.canvasWidth = 1200;
+exports.canvasHeight = 722;
 var newBrushStroke = undefined;
 var prevMouseDown = false;
 var minLengthBetweenPoint = 2;
@@ -240,14 +240,14 @@ function redo() {
 }
 // Helper to make sure mouse is inside sketchpad
 function isMouseInsideSketchpad() {
-    return mouseX >= 0 && mouseX <= canvasWidth &&
-        mouseY >= 0 && mouseY <= canvasHeight;
+    return mouseX >= 0 && mouseX <= exports.canvasWidth &&
+        mouseY >= 0 && mouseY <= exports.canvasHeight;
 }
 // Helper, to write DRY code
 function pointFromMouse() {
     return {
-        x: min(mouseX, canvasWidth),
-        y: min(mouseY, canvasHeight),
+        x: min(mouseX, exports.canvasWidth),
+        y: min(mouseY, exports.canvasHeight),
     };
 }
 
@@ -338,7 +338,7 @@ window.draw = function () {
     push();
     fill(200);
     noStroke();
-    rect(width - 478, 0, width, height);
+    rect(paint_1.canvasWidth, 0, width, height);
     pop();
     push();
     fill(210);
@@ -359,6 +359,9 @@ window.draw = function () {
     eraserButton.live();
     penButton.live();
     markerButton.live();
+    // Credits
+    textAlign(RIGHT, BOTTOM);
+    text('Lavet af\nAnders og Rasmus', width - 5, height - 5);
 };
 
 })();
