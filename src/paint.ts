@@ -82,6 +82,9 @@ export function drawSketchpad() {
     const deltaY = lastPoint.y - newLine.end.y;
     const distanceSqr = deltaX**2 + deltaY**2;
     if(distanceSqr > minLengthBetweenPoint ** 2) newBrushStroke?.lines.push(newLine);
+
+    const audioVolume = map(distanceSqr ** 0.5, 0, 200, 0, 1, true);
+    audioElement.volume = audioVolume;
   }
 
   // Update the prevMouseDown variable

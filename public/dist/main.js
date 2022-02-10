@@ -196,6 +196,8 @@ function drawSketchpad() {
         var distanceSqr = Math.pow(deltaX, 2) + Math.pow(deltaY, 2);
         if (distanceSqr > Math.pow(minLengthBetweenPoint, 2))
             newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines.push(newLine);
+        var audioVolume = map(Math.pow(distanceSqr, 0.5), 0, 200, 0, 1, true);
+        audioElement.volume = audioVolume;
     }
     // Update the prevMouseDown variable
     prevMouseDown = mouseIsPressed;
