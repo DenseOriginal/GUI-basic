@@ -12,6 +12,7 @@ let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;
 const audioElement = document.getElementById('sketch_sound') as HTMLAudioElement;
+let targetAudioVolume = 1;
 
 export enum Tool {
   PEN,
@@ -83,8 +84,9 @@ export function drawSketchpad() {
     const distanceSqr = deltaX**2 + deltaY**2;
     if(distanceSqr > minLengthBetweenPoint ** 2) newBrushStroke?.lines.push(newLine);
 
-    const audioVolume = map(distanceSqr ** 0.5, 0, 200, 0, 1, true);
-    audioElement.volume = audioVolume;
+    const audioVolume = map(distanceSqr ** 0.5, 0, 170, 0, 1, true);
+    targetAudioVolume = audioVolume;
+    audioElement.volume += (targetAudioVolume - audioElement.volume) / 5;
   }
 
   // Update the prevMouseDown variable
