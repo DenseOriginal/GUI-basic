@@ -147,7 +147,7 @@ exports.config = {
     activeTool: Tool.PEN
 };
 function drawSketchpad() {
-    drawPreviousStrokes();
+    // drawPreviousStrokes();
     // If the mouse is clicked, but wasn't in the last frame
     // Then we can start a new line
     if (mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
@@ -197,6 +197,8 @@ function drawSketchpad() {
         var distanceSqr = Math.pow(deltaX, 2) + Math.pow(deltaY, 2);
         if (distanceSqr > Math.pow(minLengthBetweenPoint, 2))
             newBrushStroke === null || newBrushStroke === void 0 ? void 0 : newBrushStroke.lines.push(newLine);
+        // Then draw the temporary stroke
+        drawPreviousStrokes(newBrushStroke);
         var audioVolume = map(Math.pow(distanceSqr, 0.5), 0, 170, 0, 1, true);
         targetAudioVolume = audioVolume;
         audioElement.volume += (targetAudioVolume - audioElement.volume) / 5;
@@ -205,10 +207,20 @@ function drawSketchpad() {
     prevMouseDown = mouseIsPressed;
 }
 exports.drawSketchpad = drawSketchpad;
-function drawPreviousStrokes() {
+function drawPreviousStrokes(strokeToDraw) {
+    // Draw a sudo background
+    // But only if we're drawing all the line
+    push();
+    fill(255);
+    if (!strokeToDraw)
+        rect(0, 0, exports.canvasWidth, exports.canvasHeight);
+    pop();
+    // Draw the strokeToDraw
+    // If it isn't provided then
     // Draw all the brush strokes
     // Including the newBrushStroke if it exist
-    var strokesToDraw = newBrushStroke ? __spreadArrays(brushStrokes, [newBrushStroke]) : brushStrokes;
+    var strokesToDraw = strokeToDraw ? [strokeToDraw] :
+        newBrushStroke ? __spreadArrays(brushStrokes, [newBrushStroke]) : brushStrokes;
     for (var _i = 0, strokesToDraw_1 = strokesToDraw; _i < strokesToDraw_1.length; _i++) {
         var brushStroke = strokesToDraw_1[_i];
         push();
@@ -241,12 +253,16 @@ function undo() {
     var strokeToUndo = brushStrokes.pop();
     if (strokeToUndo)
         redoStack.push(strokeToUndo);
+    // Redraw the strokes
+    drawPreviousStrokes();
 }
 function redo() {
     // If there is no redoStack, then we can't redo
     var strokeToRedo = redoStack.pop();
     if (strokeToRedo)
         brushStrokes.push(strokeToRedo);
+    // Redraw the strokes
+    drawPreviousStrokes();
 }
 function takeScreenshot() {
     var graphics = createGraphics(exports.canvasWidth, exports.canvasHeight);
@@ -368,11 +384,9 @@ window.setup = function () {
     exportButton.backgroundColor = color(255);
     exportButton.textSize = 18;
     exportButton.onClick = function () { return paint_1.takeScreenshot(); };
+    background(255);
 };
 window.draw = function () {
-    // We need to clear the background
-    // Otherwise CTRL+Z will not work
-    background(255);
     paint_1.drawSketchpad();
     push();
     fill(200);

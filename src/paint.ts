@@ -26,7 +26,7 @@ export const config = {
 }
 
 export function drawSketchpad() {
-  drawPreviousStrokes();
+  // drawPreviousStrokes();
 
   // If the mouse is clicked, but wasn't in the last frame
   // Then we can start a new line
@@ -84,6 +84,9 @@ export function drawSketchpad() {
     const distanceSqr = deltaX**2 + deltaY**2;
     if(distanceSqr > minLengthBetweenPoint ** 2) newBrushStroke?.lines.push(newLine);
 
+    // Then draw the temporary stroke
+    drawPreviousStrokes(newBrushStroke);
+
     const audioVolume = map(distanceSqr ** 0.5, 0, 170, 0, 1, true);
     targetAudioVolume = audioVolume;
     audioElement.volume += (targetAudioVolume - audioElement.volume) / 5;
@@ -93,10 +96,20 @@ export function drawSketchpad() {
   prevMouseDown = mouseIsPressed;
 }
 
-function drawPreviousStrokes() {
+function drawPreviousStrokes(strokeToDraw?: BrushStroke) {
+  // Draw a sudo background
+  // But only if we're drawing all the line
+  push();
+  fill(255);
+  if(!strokeToDraw) rect(0, 0, canvasWidth, canvasHeight);
+  pop();
+
+  // Draw the strokeToDraw
+  // If it isn't provided then
   // Draw all the brush strokes
   // Including the newBrushStroke if it exist
-  const strokesToDraw = newBrushStroke ? [...brushStrokes, newBrushStroke] : brushStrokes;
+  const strokesToDraw = strokeToDraw ? [strokeToDraw] :
+                        newBrushStroke ? [...brushStrokes, newBrushStroke] : brushStrokes;
   for(const brushStroke of strokesToDraw) {
     push();
     stroke(brushStroke.color as string); // IDFK whats going on here, stroke accepts both Color and string, but typescript is being a bitch when it sees a type of Color
@@ -136,12 +149,18 @@ function undo() {
   // If there is no brushStrokes, then we can't undo
   const strokeToUndo = brushStrokes.pop();
   if(strokeToUndo) redoStack.push(strokeToUndo);
+
+  // Redraw the strokes
+  drawPreviousStrokes();
 }
 
 function redo() {
   // If there is no redoStack, then we can't redo
   const strokeToRedo = redoStack.pop();
   if(strokeToRedo) brushStrokes.push(strokeToRedo);
+
+  // Redraw the strokes
+  drawPreviousStrokes();
 }
 
 export function takeScreenshot() {

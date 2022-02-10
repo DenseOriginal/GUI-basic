@@ -58,15 +58,12 @@ let colorButton: Element;
 	exportButton.backgroundColor = color(255);
 	exportButton.textSize = 18;
 	exportButton.onClick = () => takeScreenshot();
+
+	background(255);
 }
 
 (window as any).draw = () => {
-	// We need to clear the background
-	// Otherwise CTRL+Z will not work
-	background(255);
 	drawSketchpad();
-
-	
 	
 	push();
 	fill(200);
