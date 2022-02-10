@@ -43,7 +43,24 @@ https://github.com/DenseOriginal/GUI-basic/projects/1
 Flowchart der beskriver macro delen af hvordan vi tegner og opretter linjerne på skærmen.
 ![BrushStrokeFlowChart](BrushStrokeFlowChart.png)
 
-Klasse diagram over knap klassen
+
+### Funktions beskrivelse af button.isMouseOver()
+button.isMouseOver tager to argumenter:
+`width` og `height` som er bredden og højden af knappen
+Funktionen bruger så henholdsvist musens x og y (`mouseX` og `mouseY`) til at kontrollere om musen befinder sig indenfor området med udgangspunkt i centrum.
+
+Den returnerer resultatet af logikken som boolean
+```ts
+  private isMouseOver(width: number, height: number): boolean {
+    return (
+      mouseX > this.x - (width / 2) &&
+      mouseX < this.x + (width / 2) &&
+      mouseY > this.y - (height / 2) &&
+      mouseY < this.y + (height / 2)
+    );
+  }
+```
+### Klasse diagram over knap klassen
 
 ```ts
 class Button {
