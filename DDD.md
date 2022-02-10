@@ -60,6 +60,9 @@ Den returnerer resultatet af logikken som boolean
     );
   }
 ```
+### Knap klassen
+Knap klassen laver en firkant med tekst, der registrer om der holdes over den, eller klikkes på den og ændrer farve hensigtsmæssigt, samt aktualiserer funktionen af den enkelte instans
+
 ### Klasse diagram over knap klassen
 
 ```ts
