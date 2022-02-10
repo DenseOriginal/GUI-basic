@@ -134,7 +134,6 @@ var newBrushStroke = undefined;
 var prevMouseDown = false;
 var minLengthBetweenPoint = 2;
 var audioElement = document.getElementById('sketch_sound');
-audioElement.playbackRate = 0.4;
 var Tool;
 (function (Tool) {
     Tool[Tool["PEN"] = 0] = "PEN";
