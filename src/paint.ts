@@ -11,6 +11,7 @@ export const canvasHeight = 722;
 let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;
+const audioElement = document.getElementById('sketch_sound') as HTMLAudioElement;
 
 export enum Tool {
   PEN,
@@ -29,6 +30,10 @@ export function drawSketchpad() {
   // If the mouse is clicked, but wasn't in the last frame
   // Then we can start a new line
   if(mouseIsPressed && !prevMouseDown && isMouseInsideSketchpad()) {
+    // Reset the sketching sound back to the beggining, and play it
+    audioElement.currentTime = 0;
+    audioElement.play();
+
     // If the active tool is the Eraser then only do white color
     const colorToUse = color(config.activeTool == Tool.ERASER ? '#ffffff' : config.color);
 
@@ -50,6 +55,9 @@ export function drawSketchpad() {
   // If the mouse isn't clicked, but it was in the last from
   // The the mouse has been released, and we can end the line
   if(!mouseIsPressed && prevMouseDown) {
+    // Stop playing the sketching sound when not drawing
+    audioElement.pause();
+
     // Push the new brushStroke to the brushStrokes array
     // But only if newBrushStrokes isn't undefined
     if(newBrushStroke) brushStrokes.push(newBrushStroke);
