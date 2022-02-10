@@ -101,6 +101,24 @@ private _isClicked: boolean;
 }
 ```
 
+### Pseudo kode over hvordan man tegner linjer
+
+```txt
+Kør denne funktion hvert frame
+    Tegn alle tidligere streger
+
+    Hvis: Musen er trykket ned & Musen er indenfor tegne området
+        Find den farve som stregen skal tegnes med
+        
+        Opret en midlertidigt streg, med den nuværende farve og tykkelse
+
+    Hvis: Musen lige er blevet løftet
+        Så skub den midlertidige streg til brushStrokes, så at den kan blive gemt
+
+    Hvis: Musen er klikket & bliver trukket rundt på skærmen & Musen har    rykket sig mere end 2 pixels
+        Tilføj musens punkt til den midlertige streg
+```
+
 ## DELING (D3)
 https://github.com/DenseOriginal/GUI-basic
 ![Agile Scrum](agile-scrum.png)
