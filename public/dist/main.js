@@ -125,7 +125,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.drawSketchpad = exports.config = exports.Tool = exports.canvasHeight = exports.canvasWidth = void 0;
+exports.takeScreenshot = exports.drawSketchpad = exports.config = exports.Tool = exports.canvasHeight = exports.canvasWidth = void 0;
 var brushStrokes = [];
 var redoStack = [];
 exports.canvasWidth = 1200;
@@ -248,6 +248,29 @@ function redo() {
     if (strokeToRedo)
         brushStrokes.push(strokeToRedo);
 }
+function takeScreenshot() {
+    var graphics = createGraphics(exports.canvasWidth, exports.canvasHeight);
+    graphics.background(255);
+    // Draw all the strokes to the off screen graphic
+    for (var _i = 0, brushStrokes_1 = brushStrokes; _i < brushStrokes_1.length; _i++) {
+        var brushStroke = brushStrokes_1[_i];
+        graphics.stroke(brushStroke.color); // IDFK whats going on here, stroke accepts both Color and string, but typescript is being a bitch when it sees a type of Color
+        graphics.strokeWeight(brushStroke.thickness);
+        graphics.noFill();
+        // Use the name line_ as because line is reserved for the 'line' function
+        graphics.beginShape();
+        for (var _a = 0, _b = brushStroke.lines; _a < _b.length; _a++) {
+            var line_ = _b[_a];
+            graphics.vertex(line_.start.x, line_.start.y);
+        }
+        // Remmeber to draw the end point of the last line
+        var _c = brushStroke.lines[brushStroke.lines.length - 1].end, endX = _c.x, endY = _c.y;
+        graphics.vertex(endX, endY);
+        graphics.endShape();
+    }
+    graphics.save('VeryCoolSketch.jpg');
+}
+exports.takeScreenshot = takeScreenshot;
 // Helper to make sure mouse is inside sketchpad
 function isMouseInsideSketchpad() {
     return mouseX >= 0 && mouseX <= exports.canvasWidth &&
@@ -304,6 +327,7 @@ var decreaseButton;
 var eraserButton;
 var penButton;
 var markerButton;
+var exportButton;
 var colorButton;
 window.setup = function () {
     var canvas = createCanvas(1368, 722);
@@ -339,6 +363,11 @@ window.setup = function () {
         // Of the value function to ()string | number) but a colorPicker only returns a string
         paint_1.config.color = colorButton.value();
     });
+    exportButton = new button_1.Button(width - 45, 270, "Export");
+    exportButton.width = 90;
+    exportButton.backgroundColor = color(255);
+    exportButton.textSize = 18;
+    exportButton.onClick = function () { return paint_1.takeScreenshot(); };
 };
 window.draw = function () {
     // We need to clear the background
@@ -369,6 +398,7 @@ window.draw = function () {
     eraserButton.live();
     penButton.live();
     markerButton.live();
+    exportButton.live();
     // Credits
     textAlign(RIGHT, BOTTOM);
     text('Lavet af\nAnders og Rasmus', width - 5, height - 5);

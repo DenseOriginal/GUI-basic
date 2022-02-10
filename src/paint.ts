@@ -144,6 +144,39 @@ function redo() {
   if(strokeToRedo) brushStrokes.push(strokeToRedo);
 }
 
+export function takeScreenshot() {
+  const graphics = createGraphics(canvasWidth, canvasHeight);
+  graphics.background(255);
+  
+  // Draw all the strokes to the off screen graphic
+  for(const brushStroke of brushStrokes) {
+    graphics.stroke(brushStroke.color as string); // IDFK whats going on here, stroke accepts both Color and string, but typescript is being a bitch when it sees a type of Color
+    graphics.strokeWeight(brushStroke.thickness);
+    graphics.noFill();
+
+    // Use the name line_ as because line is reserved for the 'line' function
+    graphics.beginShape();
+    for(const line_ of brushStroke.lines) {
+
+      graphics.vertex(
+        line_.start.x,
+        line_.start.y,
+      );
+    }
+
+    // Remmeber to draw the end point of the last line
+    const { x: endX, y: endY } = brushStroke.lines[brushStroke.lines.length - 1].end;
+    graphics.vertex(
+      endX,
+      endY
+    );
+    
+    graphics.endShape();
+  }
+
+  graphics.save('VeryCoolSketch.jpg');
+}
+
 // Helper to make sure mouse is inside sketchpad
 function isMouseInsideSketchpad() {
   return mouseX >= 0 && mouseX <= canvasWidth &&

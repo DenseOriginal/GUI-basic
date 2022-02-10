@@ -2,13 +2,14 @@
 
 import { Element } from "p5";
 import { Button } from "./GUI/button";
-import { canvasWidth, config, drawSketchpad, Tool } from "./paint";
+import { canvasWidth, config, drawSketchpad, takeScreenshot, Tool } from "./paint";
 
 let increaseButton: Button;
 let decreaseButton: Button;
 let eraserButton: Button;
 let penButton: Button;
 let markerButton: Button;
+let exportButton: Button;
 let colorButton: Element;
 
 (window as any).setup = () => {
@@ -51,6 +52,12 @@ let colorButton: Element;
 		// Of the value function to ()string | number) but a colorPicker only returns a string
 		config.color = colorButton.value() as string;
 	});
+
+	exportButton = new Button(width-45, 270, "Export")
+	exportButton.width = 90;
+	exportButton.backgroundColor = color(255);
+	exportButton.textSize = 18;
+	exportButton.onClick = () => takeScreenshot();
 }
 
 (window as any).draw = () => {
@@ -90,6 +97,8 @@ let colorButton: Element;
 	eraserButton.live();
 	penButton.live();
 	markerButton.live();
+
+	exportButton.live();
 
 	// Credits
 	textAlign(RIGHT, BOTTOM);
