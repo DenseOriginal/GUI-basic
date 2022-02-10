@@ -12,6 +12,7 @@ let newBrushStroke: undefined | BrushStroke = undefined;
 let prevMouseDown: boolean = false;
 const minLengthBetweenPoint = 2;
 const audioElement = document.getElementById('sketch_sound') as HTMLAudioElement;
+audioElement.playbackRate = 0.4;
 
 export enum Tool {
   PEN,
